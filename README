@@ -9,7 +9,5 @@ How to build and run
 
 Room for improvement
 ====================
-
-- It's probably pointless to rotate every cylinder: we could probably let the first one
-  without rotation (otherwise we probably get 4 times all solutions). That could divide
-  by 4 the execution time
+- we're exploring 2 times more positions than needed because if "c_1 c_2 ... c_n-1 = c_n" is a valid solution
+  then it's pointless to find hat "c_n = c_1 c2 ... c_n-1" is also a solution

@@ -14,7 +14,7 @@ public class CylinderSet {
     private List<Cylinder<Integer>> values = new ArrayList<>();
     private List<Cylinder<Operation>> operations = new ArrayList<>();
 
-    private AllPossibleValuesEnumerator valuesRotationsEnumerator = new AllPossibleValuesEnumerator(4, 4);
+    private AllPossibleValuesEnumerator valuesRotationsEnumerator = new AllPossibleValuesEnumerator(3, 4); // Only 3 because there is no point in rotating the 1st cylinder (we would just find 4 equivalent solutions)
     private AllPossibleValuesEnumerator operationSRotationsEnumerator = new AllPossibleValuesEnumerator(2, 4); // Only 2 because there is no point in rotating the cylinder with all equals
     private AllPermutationsEnumerator valuesPositionsEnumerator = new AllPermutationsEnumerator(4);
     private AllPermutationsEnumerator operationPositionsEnumerator = new AllPermutationsEnumerator(3);
@@ -36,7 +36,7 @@ public class CylinderSet {
        if (valuesRotationsEnumerator.moveToNextState()) {
            return true;
        }
-       valuesRotationsEnumerator = new AllPossibleValuesEnumerator(4, 4);
+       valuesRotationsEnumerator = new AllPossibleValuesEnumerator(3, 4);
        if (operationSRotationsEnumerator.moveToNextState()) {
            return true;
        }
@@ -52,8 +52,13 @@ public class CylinderSet {
     }
 
     public Integer getValue(int idxCylinder, int idxSide) {
-        return values.get(valuesPositionsEnumerator.getValueAtPosition(idxCylinder))
-                .getSide(valuesRotationsEnumerator.getValueAtPosition(idxCylinder), idxSide);
+        int mappedPosition = valuesPositionsEnumerator.getValueAtPosition(idxCylinder);
+        Cylinder<Integer> cylinder = values.get(mappedPosition);
+        return idxCylinder == 3 ?
+                cylinder.getSide(0, idxSide) :
+                cylinder.getSide(valuesRotationsEnumerator.getValueAtPosition(idxCylinder), idxSide);
+        //return values.get(valuesPositionsEnumerator.getValueAtPosition(idxCylinder))
+        //        .getSide(valuesRotationsEnumerator.getValueAtPosition(idxCylinder), idxSide);
     }
 
     public Operation getOperation(int idxCylinder, int idxSide) {
