@@ -3,16 +3,25 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This assumes that:
+ * - there are 4 cylinders with numbers
+ * - there are 2 cylinders with operations
+ * - there is one cylinder with only "equals" (which hence does not need to be passed to the constructor)
+ * - each cylinder has 4 sides
+ */
 public class CylinderSet {
     private List<Cylinder<Integer>> values = new ArrayList<>();
     private List<Cylinder<Operation>> operations = new ArrayList<>();
 
     private AllPossibleValuesEnumerator valuesRotationsEnumerator = new AllPossibleValuesEnumerator(4, 4);
-    private AllPossibleValuesEnumerator operationSRotationsEnumerator = new AllPossibleValuesEnumerator(3, 4);
+    private AllPossibleValuesEnumerator operationSRotationsEnumerator = new AllPossibleValuesEnumerator(2, 4); // Only 2 because there is no point in rotating the cylinder with all equals
     private AllPermutationsEnumerator valuesPositionsEnumerator = new AllPermutationsEnumerator(4);
     private AllPermutationsEnumerator operationPositionsEnumerator = new AllPermutationsEnumerator(3);
 
-    public CylinderSet(Cylinder<Integer> cv0, Cylinder<Integer> cv1, Cylinder<Integer> cv2, Cylinder<Integer> cv3, Cylinder<Operation> co0, Cylinder<Operation> co1, Cylinder<Operation> co2) {
+    private Cylinder<Operation> equalCylinder = new Cylinder<Operation>(Operation.EQUALS, Operation.EQUALS, Operation.EQUALS, Operation.EQUALS);
+
+    public CylinderSet(Cylinder<Integer> cv0, Cylinder<Integer> cv1, Cylinder<Integer> cv2, Cylinder<Integer> cv3, Cylinder<Operation> co0, Cylinder<Operation> co1) {
         values.add(cv0);
         values.add(cv1);
         values.add(cv2);
@@ -20,7 +29,7 @@ public class CylinderSet {
 
         operations.add(co0);
         operations.add(co1);
-        operations.add(co2);
+        operations.add(equalCylinder);
     }
 
     public boolean moveToNextState() {
@@ -31,7 +40,7 @@ public class CylinderSet {
        if (operationSRotationsEnumerator.moveToNextState()) {
            return true;
        }
-       operationSRotationsEnumerator = new AllPossibleValuesEnumerator(3, 4);
+       operationSRotationsEnumerator = new AllPossibleValuesEnumerator(2, 4);
        if (valuesPositionsEnumerator.moveToNextState()) {
            return true;
        }
@@ -48,8 +57,11 @@ public class CylinderSet {
     }
 
     public Operation getOperation(int idxCylinder, int idxSide) {
-        return operations.get(operationPositionsEnumerator.getValueAtPosition(idxCylinder))
-                .getSide(operationSRotationsEnumerator.getValueAtPosition(idxCylinder), idxSide);
+        int mappedPosition = operationPositionsEnumerator.getValueAtPosition(idxCylinder);
+        Cylinder<Operation> cylinder = operations.get(mappedPosition);
+        return cylinder == equalCylinder ?
+                equalCylinder.getSide(0, idxSide) :
+                cylinder.getSide(operationSRotationsEnumerator.getValueAtPosition(mappedPosition), idxSide);
     }
 
     public boolean isValid() {

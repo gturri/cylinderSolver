@@ -13,5 +13,3 @@ Room for improvement
 - It's probably pointless to rotate every cylinder: we could probably let the first one
   without rotation (otherwise we probably get 4 times all solutions). That could divide
   by 4 the execution time
-- If we assume that there is always a cylinder with all equals operator then it's pointless
-  to rotate that one. Doing so could divive by 4 the execution time
