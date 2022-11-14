@@ -4,19 +4,27 @@ public class Main {
     public static void main(String[] args) {
         CylinderSet set = new CylinderSet(
                 new Cylinder<Integer>(1, 2, 3, 4),
-                new Cylinder<Integer>(5, 6, 7, 8),
-                new Cylinder<Integer>(1, 3, 5, 7),
-                new Cylinder<Integer>(2, 4, 6, 8),
+                new Cylinder<Integer>(2, 3, 4, 1),
+                new Cylinder<Integer>(3, 4, 1, 2),
+                new Cylinder<Integer>(4, 1, 2, 3),
                 new Cylinder<Operation>(Operation.ADD, Operation.MULT, Operation.DIVIDE, Operation.SUB),
-                new Cylinder<Operation>(Operation.ADD, Operation.ADD, Operation.DIVIDE, Operation.SUB),
+                new Cylinder<Operation>(Operation.MULT, Operation.DIVIDE, Operation.SUB, Operation.ADD),
                 new Cylinder<Operation>(Operation.EQUALS, Operation.EQUALS, Operation.EQUALS, Operation.EQUALS));
 
-        System.out.println(set);
-        System.out.println(set.isValid());
 
-        set.moveToNextState();
-        System.out.println(set);
-        System.out.println(set.isValid());
+        int nbIterations = 0;
+        if (set.isValid()) {
+            System.out.println(set);
+        }
+        while (set.moveToNextState()) {
+            nbIterations++;
+            if (nbIterations % 100000 == 0) {
+                System.out.println(nbIterations);
+            }
+            if (set.isValid()) {
+                System.out.println(set);
+            }
+        }
 
         System.out.println("DONE");
     }
