@@ -76,6 +76,9 @@ public class Evaluator {
             case SUB:
                 return evaluateNext(buffer - nextValue, idx+1, values, operations);
             case DIVIDE:
+                if (nextValue == 0){
+                    throw new InvalidDivisionException();
+                }
                 int remainder = buffer % nextValue;
                 if (remainder != 0) {
                     throw new InvalidDivisionException();

@@ -56,4 +56,11 @@ public class EvaluatorTest {
         assertTrue(sut.hasInvalidDivision());
         assertFalse(sut.isValid());
     }
+
+    @Test
+    public void evaluateWithADivisionByZero() {
+        Evaluator sut = new Evaluator(9, Operation.DIVIDE, 0, Operation.EQUALS, 8, Operation.ADD, 2);
+        assertTrue(sut.hasInvalidDivision());
+        assertFalse(sut.isValid());
+    }
 }
