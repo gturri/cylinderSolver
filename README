@@ -1,3 +1,7 @@
+This repo has moved to https://codeberg.org/gturri/cylinderSolver
+
+------------------------------
+
 Basic solver for puzzles where you have 7 cylinders with either number of operators
 and you have to align all to get valid equations.
 
